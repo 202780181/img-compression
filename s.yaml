@@ -29,7 +29,7 @@ services:
         handler: index.handler
         memorySize: 256
         timeout: 60
-        caPort: 3000
+        caPort: 7001
       triggers:
         - name: httpTrigger
           type: http
