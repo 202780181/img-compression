@@ -4,11 +4,13 @@ import {
   Get,
   Query,
   Post,
-  Body,
+  Files,
 } from '@midwayjs/decorator';
+const fs = require('fs');
 import { Context } from '@midwayjs/koa';
 import { UserService } from '../service/user.service';
 import { ParseService } from '../service/parse.service';
+import { resolve } from '../../utils/common';
 
 @Controller('/api')
 export class APIController {
@@ -26,10 +28,13 @@ export class APIController {
   }
 
   @Post('/parse')
-  async parseImage(@Body('file') file) {
-    console.log(file);
-    // const buffer = await this.parseService.parseImg('');
+  async parseImage(@Files() file) {
+    const sava_path = resolve() + '/static' + '/image/' + file[0].filename;
 
-    return { code: 0, status: 200, message: 'OK' };
+    const file_body = fs.readFileSync(file[0].data);
+    fs.writeFile(sava_path, file_body, err => {
+      if (err) return { err };
+    });
+    return { code: 0, status: 200, data: file_body, message: 'OK' };
   }
 }
